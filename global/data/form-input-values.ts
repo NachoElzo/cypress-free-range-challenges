@@ -9,11 +9,11 @@ import {
 const name = randomName();
 const lastName = randomLastName();
 
-const formValues = {
+export const formValues = {
   mandatory: {
     nombre: name,
     apellido: lastName,
-    email: `${name}${lastName}@${randomDomain()}`, // Usamos el mismo nombre en el email
+    email: `${name}${lastName}@${randomDomain()}`,
     telefono: randomNumber(),
     direccion: randomString(),
     ciudad: randomString(),
@@ -26,4 +26,19 @@ const formValues = {
   },
 };
 
-export default formValues;
+export const invalidValues = {
+  invalidMandatory: {
+    nombre: randomNumber(),
+    apellido: randomNumber(),
+    email: `${name}${lastName}${randomDomain()}`,
+    telefono: randomString(),
+    direccion: randomNumber(),
+    ciudad: randomNumber(),
+  },
+  invalidNotMandatory: {
+    codigopostal: randomString(),
+    pais: randomNumber(),
+    profesion: randomNumber(),
+    intereses: randomNumber(),
+  },
+};

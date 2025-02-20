@@ -1,4 +1,4 @@
-const normalizeText = (text) => {
+const normalizeText = (text: string) => {
   return text
     .normalize("NFD") // Separa los acentos de las letras
     .replace(/\s+/g, "") // Elimina todos los espacios
