@@ -1,16 +1,27 @@
+import {
+  randomName,
+  randomLastName,
+  randomNumber,
+  randomString,
+  randomDomain,
+} from "../helpers/random";
+
+const name = randomName();
+const lastName = randomLastName();
+
 const formValues = {
   mandatory: {
-    nombre: "Nacho",
-    apellido: "Elzo",
-    email: "nacho@freeRangeTester.com",
-    telefono: "+34 58888987",
-    direccion: "Calle",
-    ciudad: "Zaragoza",
+    nombre: name,
+    apellido: lastName,
+    email: `${name}${lastName}@${randomDomain()}`, // Usamos el mismo nombre en el email
+    telefono: randomNumber(),
+    direccion: randomString(),
+    ciudad: randomString(),
   },
   notMandatory: {
-    codigopostal: "585458",
+    codigopostal: randomNumber(),
     pais: "Chile",
-    profesion: "IT engineer",
+    profesion: "QA Automation",
     intereses: "Nature",
   },
 };
