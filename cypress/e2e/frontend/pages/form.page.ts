@@ -58,8 +58,7 @@ class FormChallenge {
   }
 
   areInputsValid(values: object) {
-    const invalidFields = []; // Arreglo para almacenar los errores
-
+    const invalidFields = [];
     this.get
       .formLabels()
       .each(($label) => {
@@ -72,22 +71,21 @@ class FormChallenge {
 
             if (inputValue) {
               cy.wrap($input).clear().type(inputValue);
-              cy.wrap($input).should("have.value", inputValue); // Verifica que el campo tenga el valor esperado
+              cy.wrap($input).should("have.value", inputValue); // Verifies that the input have the expected value
             }
-
-            // Validación con switch case
+            //Switch case to validate inputs rules
             switch (fieldName) {
               case "nombre":
-                if (typeof inputValue !== "string" || inputValue.length < 3) {
-                  invalidFields.push(
-                    `Nombre (field: "${fieldName}"): Invalid value (must be a string with at least 3 characters)`
-                  );
-                }
-                break;
               case "apellido":
-                if (typeof inputValue !== "string" || inputValue.length < 3) {
+              case "direccion":
+              case "ciudad":
+              case "codigopostal":
+              case "pais":
+              case "profesion":
+              case "interes":
+                if (typeof inputValue !== "string" || inputValue.length <= 3) {
                   invalidFields.push(
-                    `Apellido (field: "${fieldName}"): Invalid value (must be a string with at least 3 characters)`
+                    `${fieldName}: Invalid value (must be a string)`
                   );
                 }
                 break;
@@ -95,40 +93,29 @@ class FormChallenge {
                 const emailRegex =
                   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 if (!emailRegex.test(inputValue)) {
-                  invalidFields.push(
-                    `Email (field: "${fieldName}"): Invalid email format`
-                  );
+                  invalidFields.push(`${fieldName}: Invalid email format`);
                 }
                 break;
               case "telefono":
                 const phoneRegex = /^\+?\d{10,15}$/;
                 if (!phoneRegex.test(inputValue)) {
                   invalidFields.push(
-                    `Telefono (field: "${fieldName}"): Invalid phone number (should be 10-15 digits)`
+                    `${fieldName}: Invalid phone number (should be 10-15 digits)`
                   );
                 }
-                break;
-              case "direccion":
-                if (typeof inputValue !== "string" || inputValue.length < 5) {
-                  invalidFields.push(
-                    `Direccion (field: "${fieldName}"): Invalid value (must be a string with at least 5 characters)`
-                  );
-                }
-                break;
-              // Agrega más casos según sea necesario
-
-              default:
                 break;
             }
           });
       })
       .then(() => {
-        // Imprimir los errores al final, si los hay
+        //Prints all the error stored in console
         if (invalidFields.length > 0) {
           cy.log("Invalid fields detected: ", invalidFields);
-          // Lanzar un error para fallar el test
+          // Throw an error to fail the test
           throw new Error(
-            `Test failed due to invalid fields: ${invalidFields.join(", ")}`
+            `Inputs fields should follow corresponding type of data:\n${invalidFields.join(
+              "\n"
+            )}`
           );
         } else {
           cy.log("All fields are valid.");
