@@ -1,10 +1,10 @@
 const normalizeText = (text: string) => {
   return text
-    .normalize("NFD") // Separa los acentos de las letras
-    .replace(/\s+/g, "") // Elimina todos los espacios
-    .replace(/[^\w\s]/gi, "") // Elimina caracteres especiales
-    .trim()
-    .toLowerCase();
+    .normalize("NFD") // Converts accented characters to their base form (e.g., "é" → "e")
+    .replace(/\s+/g, "") // Removes all spaces
+    .replace(/[^\w\s]/gi, "") // Removes special characters, keeping only letters and numbers
+    .trim() // Removes spaces at the start and end
+    .toLowerCase(); // Converts text to lowercase
 };
 
 export default normalizeText;

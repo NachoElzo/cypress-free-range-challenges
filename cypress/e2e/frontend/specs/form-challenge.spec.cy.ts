@@ -13,7 +13,7 @@ describe("Validating inputs valaues from the form page", () => {
     formChallenge.fillMandatoryFields(formValues.mandatory);
     formChallenge.verifyFormSubmission();
   });
-  it("User should be able to fill the form with the valid values", () => {
+  it("Validates that user inputs match the required data types", () => {
     formChallenge.fillMandatoryFields(invalidValues.invalidMandatory);
     formChallenge.fillNotMandatoryFields(invalidValues.invalidNotMandatory);
     formChallenge.areInputsValid(formValues);
