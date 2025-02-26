@@ -5,9 +5,9 @@ import {
 } from "../../../../global/data/form-input-values";
 import { formChallenge } from "../pages/form.page";
 
-describe("Validating inputs valaues from the form page", () => {
+describe("Validating inputs values from the form page", () => {
   beforeEach(() => {
-    cy.visit(`${urls.ui.formChallenge}`);
+    cy.visit(urls.ui.formChallenge);
   });
   it("Users can successfully submit the form with only mandatory fields filled", () => {
     formChallenge.fillMandatoryFields(formValues.mandatory);
