@@ -6,24 +6,26 @@ class FormChallenge {
     successMessage: () => cy.contains("h2", "¡Registro exitoso!"),
   };
 
+  // Private function to populate mandatory * and optional input fields
   private fillFields(isMandatory: boolean, values: Record<string, any>) {
     this.get
       .formLabels()
+      // True are mandatory and false optionals
       .filter((index, label) => isMandatory === label.innerText.includes("*"))
       .each(($label) => {
         cy.wrap($label)
           .parent()
           .find("input")
           .then(($input) => {
-            const fieldName = normalizeText($label.text());
+            const fieldName = normalizeText($label.text()); // Helper function for cleans special characters from labels
             if (values[fieldName]) {
-              cy.wrap($input).clear().type(values[fieldName]);
+              cy.wrap($input).clear().type(values[fieldName]); //Type values in input fields
             }
           });
       });
   }
 
-  // Public function to fill mandatory fields
+  // Public function to fill mandatory (*) fields
   fillMandatoryFields(values: Record<string, any>) {
     this.fillFields(true, values);
   }
@@ -32,7 +34,7 @@ class FormChallenge {
   fillNotMandatoryFields(values: Record<string, any>) {
     this.fillFields(false, values);
   }
-
+  // Verifies form submission by locating the success label
   verifyFormSubmission() {
     cy.contains("button", "Enviar Registro").click();
     this.get
@@ -47,9 +49,9 @@ class FormChallenge {
         cy.log("The form has been successfully submitted.");
       });
   }
-
+  // Validates input fields follow expected value types
   areInputsValid(values: Record<string, any>) {
-    const invalidFields: string[] = []; // Explicitly defining the type as string[]
+    const invalidFields: string[] = [];
 
     this.get
       .formLabels()
@@ -77,7 +79,7 @@ class FormChallenge {
               case "interes":
                 if (typeof inputValue !== "string" || inputValue.length <= 3) {
                   invalidFields.push(
-                    `${fieldName}: Invalid value (must be a string)`
+                    ` - ${fieldName}: Invalid value (must be a string)`
                   );
                 }
                 break;
@@ -85,14 +87,14 @@ class FormChallenge {
                 const emailRegex =
                   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 if (!emailRegex.test(inputValue)) {
-                  invalidFields.push(`${fieldName}: Invalid email format`);
+                  invalidFields.push(` - ${fieldName}: Invalid email format`);
                 }
                 break;
               case "telefono":
                 const phoneRegex = /^\+?\d{8,15}$/;
                 if (!phoneRegex.test(inputValue)) {
                   invalidFields.push(
-                    `${fieldName}: Invalid phone number (should be 8-15 digits)`
+                    ` - ${fieldName}: Invalid phone number (should be 8-15 digits)`
                   );
                 }
                 break;
@@ -100,7 +102,7 @@ class FormChallenge {
           });
       })
       .then(() => {
-        // Prints all the errors stored in console
+        // Prints an error if invalidFields contain validation errors
         if (invalidFields.length > 0) {
           cy.log("Invalid fields detected: ", invalidFields);
           // Throw an error to fail the test
