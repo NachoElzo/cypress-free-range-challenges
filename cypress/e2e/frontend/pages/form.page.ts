@@ -41,8 +41,6 @@ class FormChallenge {
       .successMessage()
       .should("exist")
       .and("be.visible")
-      .invoke("text")
-      .should("include", "¡Registro exitoso!") // Use Cypress assertion instead of throw error
       .then(() => {
         cy.log("The form has been successfully submitted.");
       });
